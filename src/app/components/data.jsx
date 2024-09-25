@@ -1,27 +1,22 @@
+// components/TableComponent.js
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setTotalItems, setItems, setCurrentPage } from '@/app/Redux/paginationSlice';
+import { fetchItems, setCurrentPage } from '@/app/Redux/paginationSlice';
 
 const TableComponent = () => {
   const dispatch = useDispatch();
-  const { currentPage, itemsPerPage, items, totalItems } = useSelector((state) => state.pagination);
-
-  const data = React.useMemo(() => 
-    Array.from({ length: 50 }, (_, index) => ({
-      id: index + 1,
-      name: `User ${index + 1}`,
-      email: `user${index + 1}@example.com`,
-      age: 20 + (index % 10), 
-    })), []
-  );
+  const { currentPage, itemsPerPage, items, totalItems, status, error } = useSelector((state) => state.pagination);
 
   useEffect(() => {
-    dispatch(setTotalItems(data.length));
-    dispatch(setItems(data));
-  }, [dispatch, data]);
+    dispatch(fetchItems());
+  }, [dispatch]);
 
-  const paginatedItems = items.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-  
+  // Calculate paginated items
+  const paginatedItems = React.useMemo(() => 
+    items.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage), 
+    [items, currentPage, itemsPerPage]
+  );
+
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const handleNext = () => {
@@ -35,6 +30,14 @@ const TableComponent = () => {
       dispatch(setCurrentPage(currentPage - 1));
     }
   };
+
+  if (status === 'loading') {
+    return <div className="text-center">Loading...</div>;
+  }
+
+  if (status === 'failed') {
+    return <div className="text-center text-red-500">{error}</div>;
+  }
 
   return (
     <div className="container mx-auto p-4">
@@ -71,7 +74,6 @@ const TableComponent = () => {
         </table>
       </div>
       
-      {/* Pagination Controls */}
       <div className="flex justify-between items-center mt-4">
         <button
           onClick={handlePrevious}
