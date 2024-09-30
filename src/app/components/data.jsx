@@ -1,4 +1,3 @@
-// components/TableComponent.js
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchItems, setCurrentPage } from '@/app/Redux/paginationSlice';
@@ -11,7 +10,7 @@ const TableComponent = () => {
     dispatch(fetchItems());
   }, [dispatch]);
 
-  // Calculate paginated items
+ 
   const paginatedItems = React.useMemo(() => 
     items.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage), 
     [items, currentPage, itemsPerPage]
@@ -56,11 +55,11 @@ const TableComponent = () => {
             {paginatedItems.length > 0 ? (
               paginatedItems.map((user, index) => (
                 <tr 
-                  key={user.id} 
+                  key={user.order_number} 
                   className={`border-b border-gray-200 transition duration-200 ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-gray-100`}
                 >
-                  <td className="py-4 px-5 text-left font-medium">{user.id}</td>
-                  <td className="py-4 px-5 text-left">{user.name}</td>
+                  <td className="py-4 px-5 text-left font-medium">{user.order_number}</td>
+                  <td className="py-4 px-5 text-left">{user.order_status}</td>
                   <td className="py-4 px-5 text-left">{user.email}</td>
                   <td className="py-4 px-5 text-left">{user.age}</td>
                 </tr>
