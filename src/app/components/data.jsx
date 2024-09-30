@@ -60,8 +60,8 @@ const TableComponent = () => {
                 >
                   <td className="py-4 px-5 text-left font-medium">{user.order_number}</td>
                   <td className="py-4 px-5 text-left">{user.order_status}</td>
-                  <td className="py-4 px-5 text-left">{user.email}</td>
-                  <td className="py-4 px-5 text-left">{user.age}</td>
+                  <td className="py-4 px-5 text-left">{user.shipping_cost}</td>
+                  <td className="py-4 px-5 text-left">{user.total_bill}</td>
                 </tr>
               ))
             ) : (
